@@ -1,19 +1,57 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Social Book</title>
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
 </head>
-<body>
-    <h1>Social_Book</h1>
-    <h2>Login</h2>
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Login</button>
-    </form>
-    
-    <!-- Link to the registration page -->
-    <p>Don't have an account? <a href="{% url 'register' %}">Register here</a></p>
+<body class="bg-gradient-primary">
+
+    <div class="login-page">
+        <!-- Login Header -->
+        <div class="login-header">
+            <div class="brand-logo">
+                <img src="{% static 'img/logo-icon.png' %}" alt="Logo" class="img-fluid">
+            </div>
+        </div>
+
+        <!-- Login Form Wrapper -->
+        <div class="login-wrap">
+            <div class="container">
+                <div class="login-box">
+                    <div class="login-title">
+                        <h2>Login to Social Book</h2>
+                    </div>
+
+                    <!-- Login Form -->
+                    <form method="POST" class="user">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" name="username" id="username" class="form-control" placeholder="Enter Username" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" name="password" id="password" class="form-control" placeholder="Enter Password" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-user btn-block">Login</button>
+                    </form>
+
+                    <!-- Register Link -->
+                    <div class="text-center">
+                        <a class="small" href="{% url 'register' %}">Create an Account!</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
 </body>
 </html>

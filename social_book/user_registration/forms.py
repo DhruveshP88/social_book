@@ -1,24 +1,28 @@
 from django import forms
-from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
+from .models import CustomUser
 
-class RegisterForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput)
-    password_confirm = forms.CharField(widget=forms.PasswordInput)
+class RegisterForm(UserCreationForm):
+    # The password fields will automatically be handled by UserCreationForm
+    public_visibility = forms.BooleanField(required=False, initial=True)  # Default to True
+    birth_year = forms.IntegerField(min_value=1900, max_value=2100, required=False)  # Optional birth year
+    address = forms.CharField(max_length=255, required=False)  # Optional address
 
     class Meta:
-        model = User
-        fields = ['username', 'email']
+        model = CustomUser
+        fields = ('email', 'public_visibility', 'birth_year', 'address')  # Include the fields you want
 
     def clean(self):
         cleaned_data = super().clean()
-        password = cleaned_data.get("password")
-        password_confirm = cleaned_data.get("password_confirm")
+        password1 = cleaned_data.get("password1")  # UserCreationForm automatically uses password1 and password2
+        password2 = cleaned_data.get("password2")  # UserCreationForm automatically uses password1 and password2
 
-        if password != password_confirm:
+        if password1 != password2:
             raise forms.ValidationError("Passwords do not match")
 
         return cleaned_data
-    
+
+
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=255)
     password = forms.CharField(widget=forms.PasswordInput)

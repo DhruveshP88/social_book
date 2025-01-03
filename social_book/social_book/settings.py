@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -128,5 +129,19 @@ AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.ModelBackend']
 # social_book/settings.py
 LOGIN_URL = '/user_registration/login/'  # Update to the correct login page URL
 
+# settings.py
+
+# Static files settings
+STATIC_URL = '/static/'
+
+# Directories where Django will look for additional static files
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),  # Points to the static directory
+]
+
+# For production (this is where static files will be collected)
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+AUTH_USER_MODEL = "user_registration.CustomUser"
 
 

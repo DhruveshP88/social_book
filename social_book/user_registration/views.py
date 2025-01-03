@@ -14,7 +14,10 @@ def register(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
-            user.set_password(form.cleaned_data['password'])
+            user.set_password(form.cleaned_data['password1'])
+            user.public_visibility = form.cleaned_data['public_visibility']
+            user.birth_year = form.cleaned_data['birth_year']
+            user.address = form.cleaned_data['address']
             user.save()
             login(request, user)
             return redirect('home')  # Replace with your homepage URL
@@ -27,9 +30,9 @@ def login_view(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
-            username = form.cleaned_data['username']
+            email = form.cleaned_data['username']
             password = form.cleaned_data['password']
-            user = authenticate(request, username=username, password=password)
+            user = authenticate(request, username=email, password=password)
             if user is not None:
                 login(request, user)
                 return redirect('home')  # Redirect to homepage or any other page
