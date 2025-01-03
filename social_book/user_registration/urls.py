@@ -14,3 +14,7 @@ urlpatterns +=[
 urlpatterns +=[
   path('logout/', views.logout_view, name='logout'),
 ]
+
+urlpatterns +=[
+    path('authors_and_sellers/', views.authors_and_sellers, name='authors_and_sellers'),
+]

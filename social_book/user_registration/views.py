@@ -8,6 +8,7 @@ from .forms import LoginForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.shortcuts import redirect
+from .forms import CustomUser
 
 def register(request):
     if request.method == 'POST':
@@ -46,6 +47,13 @@ def login_view(request):
 @login_required
 def home(request):
     return render(request, 'user_registration/home.html')
+
+
+@login_required
+def authors_and_sellers(request):
+    # Filter users who have opted for public visibility
+    users = CustomUser.objects.filter(public_visibility=True)
+    return render(request, 'user_registration/authors_and_sellers.html', {'users': users})
 
 def logout_view(request):
     logout(request)
