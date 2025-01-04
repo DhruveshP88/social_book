@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Uploaded Files</title>
+    <title>MY BOOKS</title>
 </head>
 <body>
-    <h1>Your Uploaded Files</h1>
+    <h1>Your Uploaded Books</h1>
     <ul>
         {% for file in files %}
             <li>
@@ -13,9 +13,11 @@
                 <a href="{{ file.file.url }}">Download</a>
             </li>
         {% empty %}
-            <li>No files uploaded yet.</li>
+            <li>Sorry! No Books Uploaded.</li>
         {% endfor %}
     </ul>
+    <a href="{% url 'upload_file' %}">Click here if you wish to upload a book !</a>
+    <br>
     <a href="{% url 'home' %}">Back to Home</a>
 </body>
 </html>
