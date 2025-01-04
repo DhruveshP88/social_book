@@ -17,4 +17,6 @@ urlpatterns +=[
 
 urlpatterns +=[
     path('authors_and_sellers/', views.authors_and_sellers, name='authors_and_sellers'),
+    path("upload_file/", views.upload_file, name="upload_file"),
+    path("uploaded_files/", views.uploaded_files, name="uploaded_files"),
 ]

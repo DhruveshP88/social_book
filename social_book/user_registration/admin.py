@@ -2,6 +2,9 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .forms import RegisterForm
 from .models import CustomUser
+from .upload_model import UploadedFile
+
+
 
 class CustomUserAdmin(UserAdmin):
     add_form = RegisterForm  # Form used for adding new users
@@ -31,5 +34,13 @@ class CustomUserAdmin(UserAdmin):
         return obj.age  # Access the 'age' property
 
     get_age.short_description = 'Age'  # Optional: Change the column header to 'Age'
+
+@admin.register(UploadedFile)
+class UploadedFileAdmin(admin.ModelAdmin):
+    list_display = ("title", "user", "visibility", "uploaded_at")
+    search_fields = ("title", "user__email")
+    list_filter = ("visibility", "uploaded_at")
+
+
 
 admin.site.register(CustomUser, CustomUserAdmin)

@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from .models import CustomUser
+from .upload_model import UploadedFile
 
 class RegisterForm(UserCreationForm):
     # The password fields will automatically be handled by UserCreationForm
@@ -26,3 +27,20 @@ class RegisterForm(UserCreationForm):
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=255)
     password = forms.CharField(widget=forms.PasswordInput)
+
+
+class UploadedFileForm(forms.ModelForm):
+    class Meta:
+        model = UploadedFile
+        fields = ["file", "title", "description", "visibility", "cost", "year_published"]
+    def clean_file(self):
+        file = self.cleaned_data.get('file')
+        # Check if file is provided
+        if file:
+            # Check if file is either a PDF or JPEG
+            if not file.name.endswith('.pdf') and not file.name.endswith('.jpeg') and not file.name.endswith('.jpg'):
+                raise forms.ValidationError("Only PDF and JPEG files are allowed.")
+            # Optional: Check file size (e.g., limit to 10MB)
+            if file.size > 10 * 1024 * 1024:  # 10 MB
+                raise forms.ValidationError("File size should not exceed 10 MB.")
+        return file

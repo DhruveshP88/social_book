@@ -8,7 +8,8 @@ from .forms import LoginForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.shortcuts import redirect
-from .forms import CustomUser
+from .forms import CustomUser, UploadedFileForm
+
 
 def register(request):
     if request.method == 'POST':
@@ -54,6 +55,26 @@ def authors_and_sellers(request):
     # Filter users who have opted for public visibility
     users = CustomUser.objects.filter(public_visibility=True)
     return render(request, 'user_registration/authors_and_sellers.html', {'users': users})
+
+@login_required
+def upload_file(request):
+    if request.method == "POST":
+        form = UploadedFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            uploaded_file = form.save(commit=False)
+            uploaded_file.user = request.user
+            uploaded_file.save()
+            return redirect("uploaded_files")  # Redirect to uploaded files page
+    else:
+        form = UploadedFileForm()
+    return render(request, "user_registration/upload_file.html", {"form": form})
+
+
+@login_required
+def uploaded_files(request):
+    files = request.user.uploaded_files.all()  # Fetch files uploaded by the logged-in user
+    return render(request, "user_registration/uploaded_files.html", {"files": files})
+
 
 def logout_view(request):
     logout(request)

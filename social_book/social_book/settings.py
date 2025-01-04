@@ -145,3 +145,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 AUTH_USER_MODEL = "user_registration.CustomUser"
 
 
+# Media files settings
+MEDIA_URL = '/media/'  # URL to access media files
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Path to store media files
+
