@@ -8,14 +8,20 @@
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
 </head>
 <body>
+    <nav>
+        <ul>
+            <li><a href="{% url 'authors_and_sellers' %}">Authors and Sellers</a></li>
+            <li><a href="{% url 'upload_file' %}">Upload File</a></li>
+            <li><a href="{% url 'uploaded_files' %}">My Books</a></li>
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+        </ul>
+    </nav>
+
     <h1>Welcome to the Social Book Home Page!</h1>
     <p>You are logged in as {{ user.email }}</p>
-    
-    <!-- Link to Authors and Sellers page -->
-    <p><a href="{% url 'authors_and_sellers' %}">Go to Authors and Sellers</a></p>
-    <!-- Link to uploads page -->
-    <p><a href="{% url 'upload_file' %}">Upload File</a></p>
-    <p><a href="{% url 'uploaded_files' %}">MY BOOKS</a></p>
-    <p><a href="{% url 'logout' %}">Logout</a></p>
+
+    <footer>
+        <p>&copy; 2025 Social Book. All rights reserved.</p>
+    </footer>
 </body>
 </html>

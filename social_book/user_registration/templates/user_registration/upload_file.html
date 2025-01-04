@@ -1,15 +1,22 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upload File</title>
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
 </head>
 <body>
     <h1>Upload a New File</h1>
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Upload</button>
+        <button type="submit" class="btn">Upload</button>
     </form>
-    <a href="{% url 'home' %}">Back to Home</a>
+    <p><a href="{% url 'home' %}" class="back-link">Back to Home</a></p>
+       <footer>
+        <p>&copy; 2025 Social Book. All rights reserved.</p>
+    </footer>
 </body>
 </html>

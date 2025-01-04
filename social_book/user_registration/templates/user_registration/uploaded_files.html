@@ -1,23 +1,31 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>MY BOOKS</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Books</title>
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
 </head>
 <body>
     <h1>Your Uploaded Books</h1>
-    <ul>
+    <ul class="book-list">
         {% for file in files %}
-            <li>
+            <li class="book-item">
                 <strong>{{ file.title }}</strong> ({{ file.year_published }}) - {{ file.description }}
                 <br>
-                <a href="{{ file.file.url }}">Download</a>
+                <a href="{{ file.file.url }}" class="download-link">Download</a>
             </li>
         {% empty %}
-            <li>Sorry! No Books Uploaded.</li>
+            <li class="no-books">Sorry! No Books Uploaded.</li>
         {% endfor %}
     </ul>
-    <a href="{% url 'upload_file' %}">Click here if you wish to upload a book !</a>
-    <br>
-    <a href="{% url 'home' %}">Back to Home</a>
+    <div class="actions">
+        <a href="{% url 'upload_file' %}" class="btn">Upload a Book</a>
+        <a href="{% url 'home' %}" class="btn btn-secondary">Back to Home</a>
+    </div>
+       <footer>
+        <p>&copy; 2025 Social Book. All rights reserved.</p>
+    </footer>
 </body>
 </html>
