@@ -40,7 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'user_registration',
     'rest_framework',
+    'rest_framework.authtoken',
     'djoser',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -150,4 +152,22 @@ AUTH_USER_MODEL = "user_registration.CustomUser"
 # Media files settings
 MEDIA_URL = '/media/'  # URL to access media files
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Path to store media files
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+}
+
+
+DJOSER = {
+    "USER_ID_FIELD":"username"
+}
+
+
+
 

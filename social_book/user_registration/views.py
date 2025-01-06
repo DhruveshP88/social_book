@@ -7,8 +7,15 @@ from .forms import RegisterForm
 from .forms import LoginForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
-from django.shortcuts import redirect
 from .forms import CustomUser, UploadedFileForm
+from rest_framework.authtoken.models import Token
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework import status
+from .upload_model import UploadedFile
+from .serializers import UploadedFileSerializer
 
 
 def register(request):
@@ -28,6 +35,7 @@ def register(request):
 
     return render(request, 'user_registration/register.html', {'form': form})
 
+
 def login_view(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
@@ -44,6 +52,7 @@ def login_view(request):
         form = LoginForm()
 
     return render(request, 'user_registration/login.html', {'form': form})
+
 
 @login_required
 def home(request):
@@ -79,5 +88,18 @@ def uploaded_files(request):
 def logout_view(request):
     logout(request)
     return redirect('login') 
-    
+
+
+class UploadedFileListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        print("User authenticated:", request.user.is_authenticated)  # Check if the user is authenticated
+        if request.user.is_authenticated:
+            files = UploadedFile.objects.filter(user=request.user)
+            serializer = UploadedFileSerializer(files, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response({"detail": "Authentication failed"}, status=status.HTTP_401_UNAUTHORIZED)
+
 
