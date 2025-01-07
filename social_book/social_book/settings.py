@@ -43,6 +43,10 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'djoser',
     'django_extensions',
+    'django_otp',
+    'two_factor',
+    'django.contrib.sites',
+
 ]
 
 MIDDLEWARE = [
@@ -53,6 +57,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_otp.middleware.OTPMiddleware',
+
 ]
 
 ROOT_URLCONF = 'social_book.urls'
@@ -165,9 +171,17 @@ REST_FRAMEWORK = {
 
 
 DJOSER = {
-    "USER_ID_FIELD":"username"
+    "USER_ID_FIELD":"email"
 }
 
 
+#Email config
 
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'jhonpamarkytics@gmail.com'
+
+OTP_EXPIRATION_TIME = 300  # OTP expires in 5 minutes

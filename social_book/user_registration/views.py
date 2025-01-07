@@ -1,7 +1,6 @@
 
 # Create your views here.
 from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
 from django.contrib.auth import authenticate ,login
 from .forms import RegisterForm
 from .forms import LoginForm
@@ -35,7 +34,6 @@ def register(request):
 
     return render(request, 'user_registration/register.html', {'form': form})
 
-
 def login_view(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
@@ -45,13 +43,15 @@ def login_view(request):
             user = authenticate(request, username=email, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('home')  # Redirect to homepage or any other page
+                send_otp_email(user)  # Send OTP after login
+                return redirect('otp_login')  # Redirect to OTP page
             else:
                 form.add_error(None, "Invalid username or password")
     else:
         form = LoginForm()
 
     return render(request, 'user_registration/login.html', {'form': form})
+
 
 
 @login_required
@@ -84,22 +84,115 @@ def uploaded_files(request):
     files = request.user.uploaded_files.all()  # Fetch files uploaded by the logged-in user
     return render(request, "user_registration/uploaded_files.html", {"files": files})
 
+@login_required
+def my_books_dashboard(request):
+    # Fetch files uploaded by the logged-in user
+    user_files = request.user.uploaded_files.all()
+
+    # If the user has uploaded files, show them
+    if user_files:
+        return render(request, "user_registration/my_books_dashboard.html", {"files": user_files})
+    else:
+        # If no files uploaded, redirect to the upload page
+        return redirect("upload_file")
+
 
 def logout_view(request):
     logout(request)
     return redirect('login') 
 
 
+
 class UploadedFileListView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        print("User authenticated:", request.user.is_authenticated)  # Check if the user is authenticated
-        if request.user.is_authenticated:
-            files = UploadedFile.objects.filter(user=request.user)
-            serializer = UploadedFileSerializer(files, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+        # Fetch files uploaded by the authenticated user
+        files = UploadedFile.objects.filter(user=request.user)
+        serializer = UploadedFileSerializer(files, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+
+
+#otp genration
+
+import os
+import base64
+from google.auth.transport.requests import Request
+from google.oauth2.credentials import Credentials
+from google_auth_oauthlib.flow import InstalledAppFlow
+from googleapiclient.discovery import build
+from django.utils import timezone
+from datetime import timedelta
+from .otp_model import OTP
+
+# Define Gmail API scope
+SCOPES = ['https://www.googleapis.com/auth/gmail.send']
+
+def get_gmail_credentials():
+    creds = None
+    if os.path.exists('token.json'):
+        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
         else:
-            return Response({"detail": "Authentication failed"}, status=status.HTTP_401_UNAUTHORIZED)
+            flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
+            creds = flow.run_local_server(port=49811)
+        with open('token.json', 'w') as token_file:
+            token_file.write(creds.to_json())
+    return creds
+
+def send_otp_email(user):
+    otp_code = OTP.generate_otp()  # Generate OTP
+    OTP.objects.create(
+        user=user,
+        otp_code=otp_code,
+        expires_at=timezone.now() + timedelta(seconds=300)  # OTP expires in 5 minutes
+    )
+    
+    # Create the email message
+    email_message = f"To: {user.email}\nSubject: Your OTP Code\n\nYour OTP code is: {otp_code}"
+    raw_message = base64.urlsafe_b64encode(email_message.encode('utf-8')).decode('utf-8')
+
+    # Send the email using Gmail API
+    creds = get_gmail_credentials()
+    service = build('gmail', 'v1', credentials=creds)
+    message = {'raw': raw_message}
+    service.users().messages().send(userId='me', body=message).execute()
+
+
+        
+#otp verification
+
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from .otp_model import OTP
+from django.contrib import messages
+
+def otp_login(request):
+    if request.method == 'POST':
+        otp_code = request.POST.get('otp_code')
+        user = request.user  # You need to ensure the user is logged in already
+
+        try:
+            otp = OTP.objects.get(user=user, otp_code=otp_code)
+
+            if otp.is_expired():
+                messages.error(request, 'OTP has expired. Please request a new one.')
+                return redirect('otp_login')
+
+            login(request, user)  # Log the user in if OTP is valid
+            otp.delete()  # Delete OTP after successful login
+            return redirect('home')  # Redirect to the homepage or dashboard
+
+        except OTP.DoesNotExist:
+            messages.error(request, 'Invalid OTP. Please try again.')
+            return redirect('otp_login')
+
+    return render(request, 'user_registration/otp_login.html')
+
+
+
 
 

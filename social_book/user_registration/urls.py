@@ -7,6 +7,7 @@ urlpatterns = [
     # User registration and authentication
     path('register/', views.register, name='register'),
     path('login/', views.login_view, name='login'),
+    path('otp-login/', views.otp_login, name='otp_login'),
     path('home/', views.home, name='home'),
     path('logout/', views.logout_view, name='logout'),
 
@@ -14,6 +15,8 @@ urlpatterns = [
     path('authors_and_sellers/', views.authors_and_sellers, name='authors_and_sellers'),
     path("upload_file/", views.upload_file, name="upload_file"),
     path("uploaded_files/", views.uploaded_files, name="uploaded_files"),
+    path('my-books/', views.my_books_dashboard, name='my_books_dashboard'),
+
 
     # Djoser endpoints
     path('token/login/', djoser_views.TokenCreateView.as_view(), name='login'),

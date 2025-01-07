@@ -7,21 +7,39 @@
     <title>Home - Social Book</title>
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
 </head>
-<body>
-    <nav>
-        <ul>
-            <li><a href="{% url 'authors_and_sellers' %}">Authors and Sellers</a></li>
-            <li><a href="{% url 'upload_file' %}">Upload File</a></li>
-            <li><a href="{% url 'uploaded_files' %}">My Books</a></li>
-            <li><a href="{% url 'logout' %}">Logout</a></li>
+<body class="bg-light-gray">
+
+    <!-- Navigation -->
+    <nav class="bg-white box-shadow" style="padding: 15px; border-bottom: 1px solid #d4d4d4;">
+        <ul style="list-style: none; display: flex; margin: 0; padding: 0; justify-content: center;">
+            <li style="margin: 0 15px;">
+                <a href="{% url 'authors_and_sellers' %}" style="font-size: 16px; font-weight: 600; color: #f56767 text-decoration: none;">Authors and Sellers</a>
+            </li>
+            <li style="margin: 0 15px;">
+                <a href="{% url 'upload_file' %}" style="font-size: 16px; font-weight: 600; text-decoration: none;">Upload File</a>
+            </li>
+            <li style="margin: 0 15px;">
+                <a href="{% url 'uploaded_files' %}" style="font-size: 16px; font-weight: 600;  text-decoration: none;">Uploaded Files</a>
+            </li>
+            <li style="margin: 0 15px;">
+                <a href="{% url 'my_books_dashboard' %}" style="font-size: 16px; font-weight: 600;  text-decoration: none;">My Books</a>
+            </li>
+            <li style="margin: 0 15px;">
+                <a href="{% url 'logout' %}" style="font-size: 16px; font-weight: 600;  text-decoration: none;">Logout</a>
+            </li>
         </ul>
     </nav>
 
-    <h1>Welcome to the Social Book Home Page!</h1>
-    <p>You are logged in as {{ user.email }}</p>
+    <!-- Main Content -->
+    <main style="padding: 30px; text-align: center;">
+        <h1 class="h1" style="color: #1b3133; font-weight: 700; margin-bottom: 20px;">Welcome to the Social Book Home Page!</h1>
+        <p style="font-size: 18px; color: #555;">You are logged in as <strong>{{ user.email }}</strong></p>
+    </main>
 
-    <footer>
-        <p>&copy; 2025 Social Book. All rights reserved.</p>
+    <!-- Footer -->
+    <footer style="text-align: center; padding: 10px 0; background: #ffffff; border-top: 1px solid #d4d4d4;">
+        <p style="margin: 0; font-size: 14px; color: #555;">&copy; 2025 Social Book. All rights reserved.</p>
     </footer>
+
 </body>
 </html>

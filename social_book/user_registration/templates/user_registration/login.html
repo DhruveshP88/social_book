@@ -7,75 +7,78 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Social Book</title>
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
     <!-- Site favicon -->
-	<link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/apple-touch-icon.png' %}">
-	<link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon-32x32.png' %}">
-	<link rel="icon" type="image/png" sizes="16x16" href={"{% static 'img/favicon-32x32.png' %}"}>
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicon-16x16.png' %}">
 
-	<!-- Mobile Specific Metas -->
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-	<!-- Google Font -->
-	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-	<!-- CSS -->
-
-	<!-- Global site tag (gtag.js) - Google Analytics -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
-	<script>
-		window.dataLayer = window.dataLayer || [];
-		function gtag(){dataLayer.push(arguments);}
-		gtag('js', new Date());
-
-		gtag('config', 'UA-119386393-1');
-	</script>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-119386393-1');
+    </script>
 </head>
-<body class="bg-gradient-primary">
+<body class="bg-light-gray">
 
     <div class="login-page">
         <!-- Login Header -->
-        <div class="login-header">
+        <div class="login-header box-shadow d-flex align-items-center justify-content-between" style="padding: 15px 20px;">
             <div class="brand-logo">
-                <a href="{% url 'login'%}">
-                <img src="{% static 'img/deskapp-logo.svg' %}" alt="Logo" class="img-fluid">
+                <a href="{% url 'login' %}">
+                    <img src="{% static 'img/deskapp-logo.svg' %}" alt="Logo" class="img-fluid" style="max-height: 50px;">
                 </a>
             </div>
+            <div class="login-menu">
+                <ul style="list-style: none; margin: 0; padding: 0; display: flex; align-items: center;">
+                    <li style="margin-left: 15px;">
+                        <a href="{% url 'register' %}" style="font-size: 16px; font-weight: 600; color: #1b00ff; text-decoration: none;">Register</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-        
+
         <!-- Login Form Wrapper -->
-        <div class="login-wrap">
+        <div class="login-wrap d-flex align-items-center justify-content-center" style="min-height: calc(100vh - 70px); padding: 20px;">
             <div class="container">
-                <div class="login-box">
-                    <div class="login-title">
-                        <h2>Login to Social Book</h2>
+                <div class="login-box bg-white box-shadow border-radius-10" style="max-width: 400px; margin: 0 auto; padding: 30px;">
+                    <div class="login-title text-center">
+                        <h2 class="h3" style="color: #1b3133;">Login to Social Book</h2>
                     </div>
 
                     <!-- Login Form -->
-                    <form method="POST" class="user">
+                    <form method="POST" class="user" style="margin-top: 20px;">
                         {% csrf_token %}
-                        <div class="form-group">
-                            <label for="username">Username</label>
-                            <input type="text" name="username" id="username" class="form-control" placeholder="Enter Username" required>
+                        <div class="form-group" style="margin-bottom: 20px;">
+                            <label for="username" style="font-weight: 600; font-size: 14px;">Username</label>
+                            <input type="text" name="username" id="username" class="form-control" placeholder="Enter Username" required style="height: 45px; border: 1px solid #d4d4d4; padding: 10px;">
                         </div>
 
-                        <div class="form-group">
-                            <label for="password">Password</label>
-                            <input type="password" name="password" id="password" class="form-control" placeholder="Enter Password" required>
+                        <div class="form-group" style="margin-bottom: 20px;">
+                            <label for="password" style="font-weight: 600; font-size: 14px;">Password</label>
+                            <input type="password" name="password" id="password" class="form-control" placeholder="Enter Password" required style="height: 45px; border: 1px solid #d4d4d4; padding: 10px;">
                         </div>
 
-                        <button type="submit" class="btn btn-primary btn-user btn-block">Login</button>
+                        <button type="submit" class="btn btn-primary btn-user btn-block" style="background-color: #1b00ff; color: #fff; font-weight: 600; height: 45px; border: none; width: 100%; border-radius: 5px;">Login</button>
                     </form>
 
                     <!-- Register Link -->
-                    <div class="text-center">
-                        <a class="small" href="{% url 'register' %}">Create an Account!</a>
+                    <div class="text-center" style="margin-top: 20px;">
+                        <a class="small" href="{% url 'register' %}" style="color: #1b00ff; font-weight: 600; text-decoration: none;">Create an Account!</a>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
-       <footer>
-        <p>&copy; 2025 Social Book. All rights reserved.</p>
+
+    <footer style="text-align: center; padding: 10px 0; background: #ffffff; border-top: 1px solid #d4d4d4; margin-top: 20px;">
+        <p style="margin: 0; font-size: 14px; color: #555;">&copy; 2025 Social Book. All rights reserved.</p>
     </footer>
 
 </body>
